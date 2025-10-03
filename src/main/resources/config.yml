@@ -1,0 +1,27 @@
+settings:
+  dsell_seconds: 10
+  sell_min-price: 10
+  sell_max-price: 10000000
+
+messages:
+  sell_usage: "&e[⚝] &fИспользование: &#FFE000/ah sell <цена>"
+  dsell_usage: "&e[⚝] &fИспользование: &#FFE000/ah dsell <цена>"
+  search_usage: "&e[⚝] &fИспользование: &#FFE000/ah search <название товара>"
+  unknown_sub: "&e[⚝] &fНеизвестная подкоманда!"
+  invalid_price: "&e[⚝] &cУказана неверная цена!"
+  min_price: "&e[⚝] &cЦена не может быть меньше %min%!"
+  max_price: "&e[⚝] &cЦена не может быть больше %max%!"
+  no_item: "&e[⚝] &cВы не можете продать воздух!"
+  search_no_item: "&e[⚝] &cДанного товара нету на аукционе!"
+  dsell_start: "&e[⚝] &fВаш предмет будет выставлен на аукцион через &#FFE000%sec% сек."
+  sell_item: "&e[⚝] &f%player% выставил &#FFE000x%count% %item% за &#FFE000$%price%"
+  help:
+    - "&e[⚝] &#FFE000Помощь по Аукциону"
+    - "  &#FFE000/ah sell <цена> &7- &fвыставить предмет на продажу"
+    - "  &#FFE000/ah dsell <цена> &7- &fвыставить предмет с задержкой в %sec% сек."
+    - "  &#FFE000/ah search <название> &7- &fпоиск по названию"
+    - "  &#FFE000/ah <ник> &7- &fпросмотреть аукцион игрока"
+  author:
+    - "&e[⚝] &#FFE000AuctionAddon"
+    - "  &fАвтор аддона: &#FFE000Foort"
+    - "  &fВерсия: &#FFE000V1"

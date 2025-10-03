@@ -1,4 +1,10 @@
 name: AuctionAddon
 version: '${project.version}'
-main: ru.foort.auctionaddon.AuctionAddon
+main: ru.foort.auctionaddon.Main
 api-version: '1.16'
+depend:
+  - BAuction
+  - BLib
+
+commands:
+  ah:
