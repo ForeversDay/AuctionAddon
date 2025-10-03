@@ -1,0 +1,4 @@
+name: AuctionAddon
+version: '${project.version}'
+main: ru.foort.auctionaddon.AuctionAddon
+api-version: '1.16'
