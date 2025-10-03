@@ -29,12 +29,12 @@ public class AhCommand implements CommandExecutor {
     private final Utils utils;
     private final Map<String, Integer> maxItemPrices = new HashMap<>();
 
-    public AhCommand(ru.foort.auctionaddon.Main plugin, MenuLoader menuLoader, String homeMenuId, String viewMenuId) {
+    public AhCommand(ru.foort.auctionaddon.Main plugin, MenuLoader menuLoader, String homeMenuId, String viewMenuId, Utils utils) {
         this.plugin = plugin;
         this.menuLoader = menuLoader;
         this.homeMenuId = homeMenuId;
         this.viewMenuId = viewMenuId;
-        this.utils = new Utils();
+        this.utils = utils;
         utils.loadTranslations();
         loadMaxItemPrices();
     }

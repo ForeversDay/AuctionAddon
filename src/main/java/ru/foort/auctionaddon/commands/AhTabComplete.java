@@ -13,12 +13,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AhTabComplete implements TabCompleter {
-    private Utils utils;
+    private final Utils utils;
     private static final DecimalFormat FORMATTER;
     static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setGroupingSeparator(',');
         FORMATTER = new DecimalFormat("#,###", symbols);
+    }
+
+    public AhTabComplete(Utils utils) {
+        this.utils = utils;
     }
 
     @Override
