@@ -18,7 +18,7 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         saveTranslations();
         initMenuLoader();
-        getCommand("ah").setExecutor(new AhCommand(this, menuLoader, "home", "playerItemsView"));
+        getCommand("ah").setExecutor(new AhCommand(this, menuLoader, getConfig().getString("menu_settings.home"), getConfig().getString("menu_settings.view")));
         getCommand("ah").setTabCompleter(new AhTabComplete());
         getServer().getPluginManager().registerEvents(new DSellListener(), this);
     }

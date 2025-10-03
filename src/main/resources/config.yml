@@ -1,7 +1,15 @@
+menu_settings:
+  home: "home"
+  view: "playerItemsView"
+
 settings:
   dsell_seconds: 10
   sell_min-price: 10
   sell_max-price: 10000000
+
+max_price_items:
+  - "SHULKER_BOX:20000000"
+  - "PLAYER_HEAD:15000000"
 
 messages:
   sell_usage: "&e[⚝] &fИспользование: &#FFE000/ah sell <цена>"
@@ -21,7 +29,7 @@ messages:
     - "  &#FFE000/ah sell <цена> &7- &fвыставить предмет на продажу"
     - "  &#FFE000/ah dsell <цена> &7- &fвыставить предмет с задержкой в %sec% сек."
     - "  &#FFE000/ah search <название> &7- &fпоиск по названию"
-    - "  &#FFE000/ah player <ник> &7- &fпросмотреть аукцион игрока"
+    - "  &#FFE000/ah <ник> &7- &fпросмотреть аукцион игрока"
   author:
     - "&e[⚝] &#FFE000AuctionAddon"
     - "  &fАвтор аддона: &#FFE000Foort"

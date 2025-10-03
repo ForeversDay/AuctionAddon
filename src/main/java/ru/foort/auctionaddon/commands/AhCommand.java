@@ -5,7 +5,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.bauction.Main;
@@ -18,9 +17,7 @@ import org.by1337.bauction.bmenu.menu.MenuLoader;
 import ru.foort.auctionaddon.dsell.DSellEvent;
 import ru.foort.auctionaddon.utils.Color;
 import ru.foort.auctionaddon.utils.Utils;
-import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,26 +26,42 @@ public class AhCommand implements CommandExecutor {
     private final MenuLoader menuLoader;
     private final String homeMenuId;
     private final String viewMenuId;
-    private Utils utils;
+    private final Utils utils;
+    private final Map<String, Integer> maxItemPrices = new HashMap<>();
 
     public AhCommand(ru.foort.auctionaddon.Main plugin, MenuLoader menuLoader, String homeMenuId, String viewMenuId) {
         this.plugin = plugin;
         this.menuLoader = menuLoader;
         this.homeMenuId = homeMenuId;
         this.viewMenuId = viewMenuId;
+        this.utils = new Utils();
         utils.loadTranslations();
+        loadMaxItemPrices();
+    }
+
+    private void loadMaxItemPrices() {
+        maxItemPrices.clear();
+        for (String entry : plugin.getConfig().getStringList("max_price_items")) {
+            String[] parts = entry.split(":");
+            if (parts.length == 2) {
+                try {
+                    String material = parts[0].toUpperCase(Locale.ROOT);
+                    int price = Integer.parseInt(parts[1]);
+                    maxItemPrices.put(material, price);
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player))
-            return true;
+        if (!(sender instanceof Player player)) return true;
         if (args.length == 0) {
             var menu = menuLoader.getMenu(homeMenuId);
             if (menu != null) menu.create(player, null).open();
             return true;
         }
-
         String sub = args[0].toLowerCase(Locale.ROOT);
         switch (sub) {
             case "help" -> {
@@ -68,20 +81,24 @@ public class AhCommand implements CommandExecutor {
                     return true;
                 }
                 long priceL = utils.parseAmount(args[1]);
-                if (priceL < plugin.getConfig().getInt("settings.sell_min-price", 10)) {
-                    player.sendMessage(Color.translate(plugin.getConfig().getString("messages.min_price").replace("%min%", String.valueOf(plugin.getConfig().getInt("settings.sell_min-price", 10)))));
+                int minPrice = plugin.getConfig().getInt("settings.sell_min-price", 10);
+                if (priceL < minPrice) {
+                    player.sendMessage(Color.translate(plugin.getConfig().getString("messages.min_price").replace("%min%", String.valueOf(minPrice))));
                     return true;
                 }
-                if (priceL > plugin.getConfig().getInt("settings.sell_max-price", 100000000)) {
-                    player.sendMessage(Color.translate(plugin.getConfig().getString("messages.max_price").replace("%max%", String.valueOf(plugin.getConfig().getInt("settings.sell_max-price", 100000000)))));
-                    return true;
-                }
-                int price = (int) priceL;
                 ItemStack hand = player.getInventory().getItemInMainHand();
                 if (hand == null || hand.getType().isAir()) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString("messages.no_item")));
                     return true;
                 }
+                String materialName = hand.getType().name().toUpperCase(Locale.ROOT);
+                int globalMax = plugin.getConfig().getInt("settings.sell_max-price", 100000000);
+                int itemMax = maxItemPrices.getOrDefault(materialName, globalMax);
+                if (priceL > itemMax) {
+                    player.sendMessage(Color.translate(plugin.getConfig().getString("messages.max_price").replace("%max%", String.valueOf(itemMax))));
+                    return true;
+                }
+                int price = (int) priceL;
                 if (Main.getBlackList().stream().anyMatch(tag -> hand.getType().name().equalsIgnoreCase(tag))) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString("messages.item_in_black_list")));
                     return true;
