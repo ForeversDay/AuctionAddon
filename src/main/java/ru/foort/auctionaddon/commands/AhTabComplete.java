@@ -6,12 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import ru.foort.auctionaddon.utils.Utils;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AhTabComplete implements TabCompleter {
@@ -25,15 +23,29 @@ public class AhTabComplete implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args == null) args = new String[0];
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            completions.addAll(Arrays.asList("sell", "dsell", "search"));
-            for (Player p : Bukkit.getOnlinePlayers()) completions.add(p.getName());
+            String input = args[0] == null ? "" : args[0].trim().toLowerCase(Locale.ROOT);
+            List<String> baseCommands = new ArrayList<>(Arrays.asList("{player}", "dsell", "help", "search", "sell"));
+            if (input.isEmpty()) {
+                completions.addAll(baseCommands);
+            } else {
+                for (String cmd : baseCommands) {
+                    if (cmd.startsWith(input)) completions.add(cmd);
+                }
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    String name = p.getName();
+                    if (name.toLowerCase(Locale.ROOT).startsWith(input)) completions.add(name);
+                }
+            }
         } else if (args.length >= 2) {
-            if (args[0].equalsIgnoreCase("search")) {
+            if (args[0] != null && args[0].equalsIgnoreCase("search")) {
                 String input = String.join("_", Arrays.copyOfRange(args, 1, args.length)).toLowerCase(Locale.ROOT);
-                for (String ruName : utils.getRuNames()) if (ruName.toLowerCase(Locale.ROOT).contains(input)) completions.add(ruName);
-            } else if (args[0].equalsIgnoreCase("sell") || args[0].equalsIgnoreCase("dsell")) {
+                for (String ruName : utils.getRuNames()) {
+                    if (ruName.toLowerCase(Locale.ROOT).contains(input)) completions.add(ruName);
+                }
+            } else if (args[0] != null && (args[0].equalsIgnoreCase("sell") || args[0].equalsIgnoreCase("dsell"))) {
                 try {
                     String clean = args[1].replace(",", "").replace(".", "");
                     long parsed = Long.parseLong(clean);

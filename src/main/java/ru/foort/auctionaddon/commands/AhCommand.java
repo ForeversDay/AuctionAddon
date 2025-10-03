@@ -75,6 +75,11 @@ public class AhCommand implements CommandExecutor {
                     player.sendMessage(Color.translate(line));
                 return true;
             }
+            case "{player}" -> {
+                for (String line : plugin.getConfig().getStringList("messages.help"))
+                    player.sendMessage(Color.translate(line));
+                return true;
+            }
             case "sell", "dsell" -> {
                 if (args.length < 2) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString(sub + "_usage")));
@@ -155,7 +160,7 @@ public class AhCommand implements CommandExecutor {
                 custom.setTags(resultTags.stream().map(utils.getRuToEn()::get).collect(Collectors.toSet()));
                 var menu = menuLoader.getMenu(homeMenuId);
                 if (menu == null) {
-                    player.sendMessage(Color.translate("&fЭх, опять… То ли я что-то намудрил, то ли ты забыл в Main поменять название меню на своё."));
+                    plugin.getInstance().getLogger().severe(Color.translate("&cMenu: home не найдено!"));
                     return true;
                 }
                 var m = menu.create(player, null);
@@ -183,7 +188,7 @@ public class AhCommand implements CommandExecutor {
                 }
                 var menu = menuLoader.getMenu(viewMenuId);
                 if (menu == null) {
-                    player.sendMessage(Color.translate("&fЭх, опять… То ли я что-то намудрил, то ли ты забыл в Main поменять название меню на своё."));
+                    plugin.getInstance().getLogger().severe(Color.translate("&cMenu: view не найдено!"));
                     return true;
                 }
                 var m = menu.create(player, null);
