@@ -13,16 +13,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AhTabComplete implements TabCompleter {
-    private final Utils utils;
     private static final DecimalFormat FORMATTER;
     static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setGroupingSeparator(',');
         FORMATTER = new DecimalFormat("#,###", symbols);
-    }
-
-    public AhTabComplete(Utils utils) {
-        this.utils = utils;
     }
 
     @Override
@@ -46,7 +41,7 @@ public class AhTabComplete implements TabCompleter {
         } else if (args.length >= 2) {
             if (args[0] != null && args[0].equalsIgnoreCase("search")) {
                 String input = String.join("_", Arrays.copyOfRange(args, 1, args.length)).toLowerCase(Locale.ROOT);
-                for (String ruName : utils.getRuNames()) {
+                for (String ruName : Utils.getRuNames()) {
                     if (ruName.toLowerCase(Locale.ROOT).contains(input)) completions.add(ruName);
                 }
             } else if (args[0] != null && (args[0].equalsIgnoreCase("sell") || args[0].equalsIgnoreCase("dsell"))) {

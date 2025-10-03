@@ -26,16 +26,14 @@ public class AhCommand implements CommandExecutor {
     private final MenuLoader menuLoader;
     private final String homeMenuId;
     private final String viewMenuId;
-    private final Utils utils;
     private final Map<String, Integer> maxItemPrices = new HashMap<>();
 
-    public AhCommand(ru.foort.auctionaddon.Main plugin, MenuLoader menuLoader, String homeMenuId, String viewMenuId, Utils utils) {
+    public AhCommand(ru.foort.auctionaddon.Main plugin, MenuLoader menuLoader, String homeMenuId, String viewMenuId) {
         this.plugin = plugin;
         this.menuLoader = menuLoader;
         this.homeMenuId = homeMenuId;
         this.viewMenuId = viewMenuId;
-        this.utils = utils;
-        utils.loadTranslations();
+        Utils.loadTranslations(plugin);
         loadMaxItemPrices();
     }
 
@@ -75,17 +73,12 @@ public class AhCommand implements CommandExecutor {
                     player.sendMessage(Color.translate(line));
                 return true;
             }
-            case "{player}" -> {
-                for (String line : plugin.getConfig().getStringList("messages.help"))
-                    player.sendMessage(Color.translate(line));
-                return true;
-            }
             case "sell", "dsell" -> {
                 if (args.length < 2) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString(sub + "_usage")));
                     return true;
                 }
-                long priceL = utils.parseAmount(args[1]);
+                long priceL = Utils.parseAmount(args[1]);
                 int minPrice = plugin.getConfig().getInt("settings.sell_min-price", 10);
                 if (priceL < minPrice) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString("messages.min_price").replace("%min%", String.valueOf(minPrice))));
@@ -150,14 +143,14 @@ public class AhCommand implements CommandExecutor {
                     return true;
                 }
                 String input = String.join("_", Arrays.copyOfRange(args, 1, args.length)).toLowerCase(Locale.ROOT);
-                Set<String> resultTags = utils.getRuToEn().keySet().stream().filter(tag -> tag.contains(input)).collect(Collectors.toSet());
+                Set<String> resultTags = Utils.getRuToEn().keySet().stream().filter(tag -> tag.contains(input)).collect(Collectors.toSet());
                 if (resultTags.isEmpty()) {
                     player.sendMessage(Color.translate(plugin.getConfig().getString("messages.search_no_item")));
                     return true;
                 }
                 Category custom = Main.getCfg().getSorting().getAs("special.search", Category.class);
                 custom.setSoft(true);
-                custom.setTags(resultTags.stream().map(utils.getRuToEn()::get).collect(Collectors.toSet()));
+                custom.setTags(resultTags.stream().map(Utils.getRuToEn()::get).collect(Collectors.toSet()));
                 var menu = menuLoader.getMenu(homeMenuId);
                 if (menu == null) {
                     plugin.getInstance().getLogger().severe(Color.translate("&cMenu: home не найдено!"));

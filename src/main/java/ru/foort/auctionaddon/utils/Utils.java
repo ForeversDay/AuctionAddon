@@ -4,11 +4,11 @@ import ru.foort.auctionaddon.Main;
 import java.util.*;
 
 public class Utils {
-    private Main plugin;
-    private final Map<String, String> ruToEn = new HashMap<>();
-    private final List<String> ruNames = new ArrayList<>();
+    private static Main plugin;
+    private static final Map<String, String> ruToEn = new HashMap<>();
+    private static final List<String> ruNames = new ArrayList<>();
 
-    public long parseAmount(String input) {
+    public static long parseAmount(String input) {
         if (input == null) return -1;
         input = input.toLowerCase(Locale.ROOT).replace(" ", "").replace(",", "").replace(".", "");
         double multiplier = 1;
@@ -19,8 +19,9 @@ public class Utils {
         catch (NumberFormatException e) { return -1; }
     }
 
-    public void loadTranslations() {
+    public static void loadTranslations(Main pl) {
         try {
+            plugin = pl;
             java.io.File f = new java.io.File(plugin.getDataFolder(), "ru_ru.json");
             if (!f.exists()) return;
             String content = java.nio.file.Files.readString(f.toPath(), java.nio.charset.StandardCharsets.UTF_8);
@@ -34,11 +35,11 @@ public class Utils {
         } catch (Exception ignored) {}
     }
 
-    public List<String> getRuNames() {
+    public static List<String> getRuNames() {
         return ruNames;
     }
 
-    public Map<String, String> getRuToEn() {
+    public static Map<String, String> getRuToEn() {
         return ruToEn;
     }
 }

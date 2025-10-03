@@ -20,9 +20,8 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         saveTranslations();
         initMenuLoader();
-        Utils utils = new Utils();
-        getCommand("ah").setExecutor(new AhCommand(this, menuLoader, getConfig().getString("menu_settings.home"), getConfig().getString("menu_settings.view"), utils));
-        getCommand("ah").setTabCompleter(new AhTabComplete(utils));
+        getCommand("ah").setExecutor(new AhCommand(this, menuLoader, getConfig().getString("menu_settings.home"), getConfig().getString("menu_settings.view")));
+        getCommand("ah").setTabCompleter(new AhTabComplete());
         getServer().getPluginManager().registerEvents(new DSellListener(), this);
     }
 
