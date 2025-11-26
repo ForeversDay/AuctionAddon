@@ -6,7 +6,7 @@
 
   <groupId>ru.foort</groupId>
   <artifactId>AuctionAddon</artifactId>
-  <version>1.0.1</version>
+  <version>1.6</version>
   <packaging>jar</packaging>
 
   <name>AuctionAddon</name>
@@ -58,6 +58,10 @@
           <id>sonatype</id>
           <url>https://oss.sonatype.org/content/groups/public/</url>
       </repository>
+      <repository>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
+      </repository>
   </repositories>
 
   <dependencies>
@@ -82,5 +86,11 @@
               <artifactId>adventure-text-serializer-legacy</artifactId>
               <version>4.13.1</version>
           </dependency>
+      <dependency>
+          <groupId>com.github.MilkBowl</groupId>
+          <artifactId>VaultAPI</artifactId>
+          <version>1.7.1</version>
+          <scope>provided</scope>
+      </dependency>
   </dependencies>
 </project>

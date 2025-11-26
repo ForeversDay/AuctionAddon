@@ -1,28 +1,59 @@
 package ru.foort.auctionaddon;
 
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.by1337.bauction.bmenu.menu.MenuLoader;
-import ru.foort.auctionaddon.commands.AhCommand;
-import ru.foort.auctionaddon.commands.AhTabComplete;
-import ru.foort.auctionaddon.dsell.DSellListener;
-import ru.foort.auctionaddon.utils.Utils;
-
+import ru.foort.auctionaddon.commands.Command;
+import ru.foort.auctionaddon.commands.TabComplete;
+import ru.foort.auctionaddon.commands.impl.*;
+import ru.foort.auctionaddon.events.BuyEvent;
+import ru.foort.auctionaddon.events.OfflineBuyEvent;
 import java.io.File;
 import java.lang.reflect.Field;
 
 public class Main extends JavaPlugin {
     private static Main instance;
+    private Economy economy;
     private MenuLoader menuLoader;
+    private AddItemsCommand addItemsCommand;
+    private PSellCommand pSellCommand;
+    private ResellCommand resellCommand;
+    private SearchCommand searchCommand;
+    private SellCommand sellCommand;
+    private ViewCommand viewCommand;
 
     @Override
     public void onEnable() {
+        if (getServer().getPluginManager().getPlugin("BAuction") == null) {
+            getServer().getLogger().severe("Не найден плагин BAuction");
+            this.setEnabled(false);
+            return;
+        }
+        if (getServer().getPluginManager().getPlugin("BLib") == null) {
+            getServer().getLogger().severe("Не найден плагин BLib");
+            this.setEnabled(false);
+            return;
+        }
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            getServer().getLogger().severe("Не найден плагин Vault");
+            this.setEnabled(false);
+            return;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            setEnabled(false);
+            return;
+        }
+        economy = rsp.getProvider();
         instance = this;
         saveDefaultConfig();
         saveTranslations();
         initMenuLoader();
-        getCommand("ah").setExecutor(new AhCommand(this, menuLoader, getConfig().getString("menu_settings.home"), getConfig().getString("menu_settings.view")));
-        getCommand("ah").setTabCompleter(new AhTabComplete());
-        getServer().getPluginManager().registerEvents(new DSellListener(), this);
+        getCommand("ah").setExecutor(new Command(this, menuLoader, getConfig().getString("menu_settings.home"), getConfig().getString("menu_settings.view")));
+        getCommand("ah").setTabCompleter(new TabComplete());
+        getServer().getPluginManager().registerEvents(new BuyEvent(this), this);
+        getServer().getPluginManager().registerEvents(new OfflineBuyEvent(this), this);
     }
 
     private void initMenuLoader() {
@@ -35,7 +66,8 @@ public class Main extends JavaPlugin {
                     menuLoader = (MenuLoader) ml;
                     return;
                 }
-            } catch (NoSuchMethodException ignored) {}
+            } catch (NoSuchMethodException ignored) {
+            }
 
             for (Field f : baClass.getDeclaredFields()) {
                 try {
@@ -45,9 +77,11 @@ public class Main extends JavaPlugin {
                         menuLoader = (MenuLoader) val;
                         return;
                     }
-                } catch (Throwable ignoredField) {}
+                } catch (Throwable ignoredField) {
+                }
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     private void saveTranslations() {
@@ -59,7 +93,35 @@ public class Main extends JavaPlugin {
         return instance;
     }
 
+    public Economy getEconomy() {
+        return economy;
+    }
+
     public MenuLoader getMenuLoader() {
         return menuLoader;
+    }
+
+    public AddItemsCommand getAddItemsCommand() {
+        return addItemsCommand;
+    }
+
+    public PSellCommand getPSellCommand() {
+        return pSellCommand;
+    }
+
+    public ResellCommand getResellCommand() {
+        return resellCommand;
+    }
+
+    public SearchCommand getSearchCommand() {
+        return searchCommand;
+    }
+
+    public SellCommand getSellCommand() {
+        return sellCommand;
+    }
+
+    public ViewCommand getViewCommand() {
+        return viewCommand;
     }
 }

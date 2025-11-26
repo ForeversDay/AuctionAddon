@@ -21,7 +21,8 @@ public class Color {
         while (matcher.find()) {
             String hex = matcher.group(1);
             StringBuilder replacement = new StringBuilder("§x");
-            for (char c : hex.toCharArray()) {replacement.append('§').append(c);
+            for (char c : hex.toCharArray()) {
+                replacement.append('§').append(c);
             }
             matcher.appendReplacement(buffer, replacement.toString());
         }
@@ -42,21 +43,5 @@ public class Color {
         }
         matcher.appendTail(buffer);
         return buffer.toString();
-    }
-
-    public static String formatTime(String time) {
-        if (time == null || time.isEmpty()) return "";
-
-        String lower = time.toLowerCase();
-
-        if (lower.contains("y") || lower.contains("year")) return time;
-        if (lower.contains("mo") || lower.contains("month")) return time;
-        if (lower.contains("w") || lower.contains("week")) return time;
-        if (lower.contains("d") || lower.contains("day")) return time;
-        if (lower.contains("h") || lower.contains("hour")) return time;
-        if (lower.contains("m") || lower.contains("min")) return time;
-        if (lower.contains("s") || lower.contains("sec") || lower.contains("second")) return time;
-
-        return "";
     }
 }

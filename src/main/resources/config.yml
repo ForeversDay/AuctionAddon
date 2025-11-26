@@ -1,36 +1,59 @@
 menu_settings:
-  home: "home"
-  view: "playerItemsView"
+  home: "home" # id меню
+  view: "playerItemsView" # id меню
 
 settings:
-  dsell_seconds: 10
-  sell_min-price: 10
-  sell_max-price: 10000000
+  sell_min-price: 10 # минимальная цена товара
+  sell_max-price: 10000000 # максимальная цена товара
+  allow_shulker_with_items: false # можно ли выставлять на продажу шалкер с ресурсами внутри
+  resell_cooldown: 60 # задержка на перевыставление товаров в секундах
+  public_fee_percent: 10.0 # процент комиссии за публичную продажу
+  sounds: # если хотите, чтобы звука не было, ставьте NONE, звука не будет
+    sell: UI_BUTTON_CLICK
+    resell: UI_BUTTON_CLICK
+    resell_cooldown: BLOCK_ANVIL_USE
 
-max_price_items:
+max_price_items: # максимальная цена для отдельных товаров
   - "SHULKER_BOX:20000000"
   - "PLAYER_HEAD:15000000"
 
 messages:
   sell_usage: "&e[⚝] &fИспользование: &#FFE000/ah sell <цена>"
-  dsell_usage: "&e[⚝] &fИспользование: &#FFE000/ah dsell <цена>"
+  public_usage: "&e[⚝] &fИспользование: &#FFE000/ah psell <цена>"
   search_usage: "&e[⚝] &fИспользование: &#FFE000/ah search <название товара>"
-  no_player: "&e[⚝] &сИгрок не найден!"
-  unknown_sub: "&e[⚝] &fНеизвестная подкоманда!"
+  additems_usage: "&e[⚝] &fИспользование: &#FFE000/ah additems <id> <название предмета>"
+  shulker_not_allowed: "&e[⚝] &cЗапрещено продавать шалкеры с предметами внутри!"
   invalid_price: "&e[⚝] &cУказана неверная цена!"
+  item_in_black_list: "&e[⚝] &cЭтот предмет нельзя продать"
   min_price: "&e[⚝] &cЦена не может быть меньше %min%!"
   max_price: "&e[⚝] &cЦена не может быть больше %max%!"
   no_item: "&e[⚝] &cВы не можете продать воздух!"
+  no_player: "&e[⚝] &cИгрок не найден!"
+  no_items_resell: "&e[⚝] &cУ вас нет товаров для перепродажи"
+  resell_cooldown: "&e[⚝] &cВы сможете перевыставить все свои товары только через %time% сек."
+  resell_success: "&e[⚝] &fВы успешно перевыставили все свои товары!"
   search_no_item: "&e[⚝] &cДанного товара нету на аукционе!"
-  dsell_start: "&e[⚝] &fВаш предмет будет выставлен на аукцион через &#FFE000%sec% сек."
-  sell_item: "&e[⚝] &f%player% выставил &#FFE000x%count% %item% за &#FFE000$%price%"
+  sell_item: "&e[⚝] &fВы выставили &#FFE000x%count% %item% &fна продажу за &#FFE000%price%$"
+  sale_offline: "&7[%time% %date%] &fИгрок &#FFE000%buyer% &fкупил у вас &#FFE000x%count% %item% за &#FFE000%price%$"
+  no_pending_public: "&e[⚝] &cУ вас нет отложенной продажи для подтверждения!"
+  not_enough_money_public: "&e[⚝] &cУ вас недостаточно денег для оплаты комиссии (%fee% монет)!"
+  public_preview:
+    - "&e[⚝] &fВведите &e/ah psell confirm&f, чтобы подтвердить публичную продажу."
+    - " &fЦена объявления: &6%price_broad%&f, Цена предмета: &6%price_items%$"
+  public_broadcast:
+    - "&e[⚝] &#FF6000%seller% &fвыставил на продажу &#FFE000x%amount% %items%"
+    - "&fПолная цена: &#FFE000%price_items%$&f, Цена за 1 шт.: &#FFE000%price_one_items%$"
+    - "{open_seller_auction}"
   help:
     - "&e[⚝] &#FFE000Помощь по Аукциону"
     - "  &#FFE000/ah sell <цена> &7- &fвыставить предмет на продажу"
-    - "  &#FFE000/ah dsell <цена> &7- &fвыставить предмет с задержкой в %sec% сек."
-    - "  &#FFE000/ah search <название> &7- &fпоиск по названию"
+    - "  &#FFE000/ah search <название> &7- &fпоиск товаров"
+    - "  &#FFE000/ah psell <цена> &7- &fпубличная продажа с объявлением на весь сервер"
+    - "  &#FFE000/ah additems <id> <название предмета> &7- &fдобавить кастомный предмет для /ah search"
+    - "  &#FFE000/ah resell &7- &fперевыставить все свои товары"
     - "  &#FFE000/ah <ник> &7- &fпросмотреть аукцион игрока"
-  author:
-    - "&e[⚝] &#FFE000AuctionAddon"
-    - "  &fАвтор аддона: &#FFE000Foort"
-    - "  &fВерсия: &#FFE000V1"
+
+open_seller_auction:
+  command: "ah %seller%"
+  text: "&a[Посмотреть аукцион игрока]"
+  hoverMessage: "&fНажми, чтобы открыть"

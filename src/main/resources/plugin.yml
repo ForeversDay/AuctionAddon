@@ -2,9 +2,8 @@ name: AuctionAddon
 version: '${project.version}'
 main: ru.foort.auctionaddon.Main
 api-version: '1.16'
-depend:
-  - BAuction
-  - BLib
+depend: [BAuction, BLib, Vault]
+author: Foort
 
 commands:
   ah:
